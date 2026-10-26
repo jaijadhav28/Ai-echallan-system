@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: ai-echallan-system
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: MONGO_DB_NAME
+        value: rto_echallan
+      - key: GROQ_MODEL
+        value: qwen/qwen3.8-27b
+      - key: GROQ_TEXT_MODEL
+        value: openai/gpt-oss-120b
+      - key: SMS_PROVIDER
+        value: Fast2SMS
+      - key: PLATE_RECOGNIZER_REGIONS
+        value: in
+      - key: MONGO_URI
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OCR_API_KEY
+        sync: false
+      - key: PLATE_RECOGNIZER_API_KEY
+        sync: false
+      - key: SMS_API_KEY
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
