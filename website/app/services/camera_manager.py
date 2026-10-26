@@ -997,13 +997,26 @@ def test_camera_connection(config: dict, timeout: float = 12.0) -> dict:
     )
     try:
         if not capture.isOpened():
+            extra_hint = ""
+            parsed_host = urlparse(target).hostname or ""
+            try:
+                import ipaddress
+                if ipaddress.ip_address(parsed_host).is_private:
+                    extra_hint = (
+                        f" Note: {parsed_host} is a private local Wi-Fi IP address. "
+                        "Cloud-hosted deployments (such as Render) cannot access devices on your local Wi-Fi. "
+                        "To use your phone camera on Render, forward the feed through a public tunnel (such as Ngrok or Pinggy) or use the built-in Demo Camera."
+                    )
+            except Exception:
+                pass
+
             return {
                 "ok": False,
                 "mode": "LIVE" if kind == "live" else "DEMO",
                 "source_kind": kind,
                 "message": (
                     f"Could not connect to {redact_url(target)}. Check the IP address, "
-                    "port, credentials and that the camera is on the same network."
+                    f"port, credentials and that the camera is on the same network.{extra_hint}"
                 ),
                 "resolution": "",
                 "latency_ms": int((time.perf_counter() - started) * 1000),
